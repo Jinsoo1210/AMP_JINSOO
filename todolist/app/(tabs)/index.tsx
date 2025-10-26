@@ -2,7 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import axios from 'axios';
 import { Link, router } from 'expo-router';
-import { useState } from 'react'; 
+import { useEffect, useState } from 'react'; 
 import { tokenStorage } from '../storage';
 import { ActivityIndicator, Alert, Platform, Pressable, StyleSheet, TextInput } from 'react-native';
 
@@ -16,6 +16,31 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [time, setTime] = useState('');
+  const [dateText, setDateText] = useState('');
+
+  // ✅ 현재 시간 실시간 업데이트
+  useEffect(() => {
+    const weekdays = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+
+    const updateTime = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')}`;
+      setTime(formattedTime);
+
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+      const weekday = weekdays[now.getDay()];
+      setDateText(`${month}월 ${day}일 ${weekday}`);
+    };
+
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -105,8 +130,10 @@ export default function LoginScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title" style={styles.title}>환영합니다!</ThemedText>
-      <TextInput
+      {/* ✅ 큰 시계 */}
+      {/* <ThemedText style={styles.time}>{time}</ThemedText> */}
+      {/* <ThemedText style={styles.date}>{dateText}</ThemedText> */}
+      {/* <TextInput
         style={styles.input}
         placeholder="이메일"
         value={email}
@@ -122,15 +149,25 @@ export default function LoginScreen() {
         onChangeText={setPassword}
         secureTextEntry
         placeholderTextColor="#888"
-      />
+      /> */}
+      <ThemedText style={styles.slogan}>
+         당신만의 스마트 비서 투두리스트
+      </ThemedText>
+      <ThemedText style={styles.slogan2}>
+         캐롯
+      </ThemedText>
       <Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]} onPress={handleLogin} disabled={isLoading}>
         {isLoading ? <ActivityIndicator color="#fff" /> : <ThemedText style={styles.buttonText}>로그인</ThemedText>}
       </Pressable>
-      <Link href="/signup" asChild>
-        <Pressable style={styles.linkContainer}>
-          <ThemedText type="link">계정이 없으신가요? 회원가입</ThemedText>
-        </Pressable>
-      </Link>
+      <Pressable
+        style={({ pressed }) => [
+        styles.signupButton,
+        pressed && styles.signupButtonPressed
+      ]}
+      onPress={() => router.push('/signup')} // 회원가입 화면으로 이동
+>
+  <ThemedText style={styles.signupButtonText}>회원가입</ThemedText>
+</Pressable>
     </ThemedView>
   );
 }
@@ -143,37 +180,86 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5', // 밝은 배경색
     gap: 16,
   },
-  title: {
+  slogan: {
+    fontSize: 25,
+    fontWeight: '700',
+    color: '#3A3A3A',
+    textAlign: 'center',  // 화면 가운데 정렬
+    marginBottom: 5,        // 로그인 박스 위에 여유 공간
+  },
+  slogan2: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFB347',
+    textAlign: 'center',  // 화면 가운데 정렬
+    marginBottom: 100,        // 로그인 박스 위에 여유 공간
+  },
+  time: {
     textAlign: 'center',
-    marginBottom: 24,
+    fontSize: 120, // 커다란 시계
+    fontWeight: '700',
+    color: '#222222',
+    marginBottom: 50,
+
+    textShadowColor: '#D3D3D3',    // 그림자(테두리) 색상
+    textShadowOffset: { width: 9, height: 6 }, // 그림자 위치
+    textShadowRadius: 2, 
+  },
+  date: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '500',
+    color: '#222222',
+    marginBottom: 50,
+
+    textShadowColor: '#D3D3D3',    // 그림자(테두리) 색상
+    textShadowOffset: { width: 3, height: 2 }, // 그림자 위치
+    textShadowRadius: 2, 
   },
   input: {
     height: 50,
-    backgroundColor: '#fff',
+    backgroundColor: '#D3D3D3',
     paddingHorizontal: 16,
-    borderRadius: 8,
+    borderRadius: 30,
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#ddd',
   },
   button: {
     height: 50,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FFB347',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    marginTop: 8,
+    marginTop: 30,
   },
   buttonPressed: {
-    backgroundColor: '#0056b3',
+    backgroundColor: '#D3D3D3',
   },
   buttonText: {
-    color: '#fff',
+    color: '#000',
     fontSize: 16,
     fontWeight: 'bold',
   },
+  signupButton: {
+  height: 50,
+  backgroundColor: '#FFE0A3', // 
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 8,
+  marginTop: 10,
+  },
+  signupButtonPressed: {
+    backgroundColor: '#D3D3D3', // 버튼 눌렀을 때 살짝 진한 오렌지
+  },
+  signupButtonText: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
   linkContainer: {
-    marginTop: 16,
-    alignItems: 'center',
+      marginTop: 16,
+      alignItems: 'center',
   },
 });
