@@ -4,63 +4,81 @@ import { Link, router } from 'expo-router';
 import { tokenStorage } from './storage';
 import { Alert, Button, Platform, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import TodosScreen from './todos';
 
-// 재사용 가능한 InfoCard 컴포넌트 정의
-type InfoCardProps = {
-  title: string;
-  children: React.ReactNode;
-};
+const Drawer = createDrawerNavigator();
 
-const InfoCard = ({ title, children }: InfoCardProps) => (
-  <ThemedView style={styles.card}>
-    <ThemedText type="subtitle" style={styles.blackText}>{title}</ThemedText>
-    {children}
-  </ThemedView>
-);
-export default function HomeScreen() {
+// 기존 홈 화면 UI를 컴포넌트로 분리
+function HomeContent() {
+  const navigation = useNavigation<any>();
 
   const handleLogout = async () => {
-    // 기기에 저장된 인증 토큰을 삭제합니다.
     await tokenStorage.removeItem();
-
-    // 사용자에게 로그아웃 되었음을 알립니다.
     Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
-    // 알림과 동시에 로그인 화면으로 즉시 이동합니다.
-    router.replace('/');
+    router.replace('/'); // 로그인 화면으로 이동
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
       <ThemedView style={styles.container}>
         <ThemedView style={styles.header}>
+          <Pressable onPress={() => navigation.toggleDrawer()} style={styles.menuButton}>
+            <Ionicons name="menu" size={28} color="#000" />
+          </Pressable>
           <ThemedText type="title" style={styles.blackText}>My App</ThemedText>
           <ThemedText style={styles.blackText}>로그인되었습니다!</ThemedText>
         </ThemedView>
 
-        <InfoCard title="환영합니다!">
+        <ThemedView style={styles.card}>
           <ThemedText style={[styles.cardText, styles.blackText]}>
-            이제 앱의 모든 기능을 자유롭게 이용할 수 있습니다.
+            환영합니다! 이제 앱의 모든 기능을 자유롭게 이용할 수 있습니다.
           </ThemedText>
-        </InfoCard>
+        </ThemedView>
 
-        <Link href="/todos" asChild>
-          <Pressable>
-            <InfoCard title="할일 목록">
-              <ThemedText style={[styles.cardText, styles.blackText]}>
-                할일 목록을 확인하고 관리하세요.
-              </ThemedText>
-            </InfoCard>
-          </Pressable>
-        </Link>
-
-        <InfoCard title="다음 단계">
-          <ThemedText style={[styles.cardText, styles.blackText]}>- 프로필 정보 수정하기</ThemedText>
-          <ThemedText style={[styles.cardText, styles.blackText]}>- 게시물 작성하기</ThemedText>
-        </InfoCard>
-
-        <Button title="로그아웃" onPress={handleLogout} color="#ff3b30" />
+        <Pressable onPress={handleLogout} style={styles.logoutButton}>
+          <ThemedText style={{ color: '#fff', fontWeight: 'bold' }}>로그아웃</ThemedText>
+        </Pressable>
       </ThemedView>
     </SafeAreaView>
+  );
+}
+
+// Drawer 내부 메뉴
+function CustomDrawerContent(props: any) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItem
+        label="홈"
+        onPress={() => props.navigation.navigate('Home')}
+      />
+      <DrawerItem
+        label="할일 목록"
+        onPress={() => props.navigation.navigate('todos')} // Todo 화면이 있다면 연결
+      />
+      <DrawerItem
+        label="로그아웃"
+        onPress={async () => {
+          await tokenStorage.removeItem();
+          Alert.alert('로그아웃', '성공적으로 로그아웃되었습니다.');
+          router.replace('/'); // 로그인 화면으로 이동
+        }}
+      />
+    </DrawerContentScrollView>
+  );
+}
+
+export default function HomeScreen() {
+  return (
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Drawer.Screen name="Home" component={HomeContent} />
+      <Drawer.Screen name="todos" component={TodosScreen} />
+    </Drawer.Navigator>
   );
 }
 
@@ -72,9 +90,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'transparent',
-    gap: 8,
+    gap: 12,
+    marginBottom: 20,
+  },
+  menuButton: {
+    marginRight: 8,
   },
   card: {
     backgroundColor: '#fff',
@@ -87,11 +109,13 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
     elevation: 2,
   },
-  blackText: { // 텍스트 색상을 검은색으로 강제 적용
-    color: '#000',
-  },
-  cardText: {
-    fontSize: 16,
-    lineHeight: 24,
+  blackText: { color: '#000' },
+  cardText: { fontSize: 16, lineHeight: 24 },
+  logoutButton: {
+    marginTop: 20,
+    backgroundColor: '#ff3b30',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
   },
 });

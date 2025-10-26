@@ -47,7 +47,8 @@ export default function SignupScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title" style={styles.title}>회원가입</ThemedText>
+      <ThemedText type="title" style={styles.title2}>캐롯</ThemedText>
+      <ThemedText type="title" style={styles.title}>가입하기</ThemedText>
       <TextInput
         style={styles.input}
         placeholder="이메일"
@@ -65,8 +66,8 @@ export default function SignupScreen() {
         secureTextEntry
         placeholderTextColor="#888"
       />
-      <Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]} onPress={handleSignup} disabled={isLoading}>
-        {isLoading ? <ActivityIndicator color="#fff" /> : <ThemedText style={styles.buttonText}>회원가입</ThemedText>}
+      <Pressable style={({ pressed }) => [styles.signupButton, pressed && styles.signupButtonPressed]} onPress={handleSignup} disabled={isLoading}>
+        {isLoading ? <ActivityIndicator color="#fff" /> : <ThemedText style={styles.signupButtonText}>회원가입</ThemedText>}
       </Pressable>
       <Link href="/" asChild>
         <Pressable style={styles.linkContainer}>
@@ -86,25 +87,40 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   title: {
-    textAlign: 'center',
-    marginBottom: 24,
+    textAlign: 'left',
+    marginLeft: 30,
+    marginBottom: 60,
   },
-  input: { height: 50, backgroundColor: '#fff', paddingHorizontal: 16, borderRadius: 8, fontSize: 16, borderWidth: 1, borderColor: '#ddd' },
-  button: {
+  title2: {
+    textAlign: 'left',
+    color: '#FFB347',
+    marginLeft: 30,
+  },
+  input: {
     height: 50,
-    backgroundColor: '#007AFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginTop: 8,
-  },
-  buttonPressed: {
-    backgroundColor: '#0056b3',
-  },
-  buttonText: {
-    color: '#fff',
+    backgroundColor: '#D3D3D3',
+    paddingHorizontal: 16,
+    borderRadius: 30,
     fontSize: 16,
-    fontWeight: 'bold',
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  signupButton: {
+  height: 50,
+  backgroundColor: '#FFE0A3', // 
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 8,
+  marginTop: 100,
+  },
+  signupButtonPressed: {
+    backgroundColor: '#D3D3D3', // 버튼 눌렀을 때 살짝 진한 오렌지
+  },
+  signupButtonText: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: '700',
+    textAlign: 'center',
   },
   linkContainer: { marginTop: 16, alignItems: 'center' },
 });
