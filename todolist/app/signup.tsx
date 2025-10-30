@@ -3,7 +3,8 @@ import { ThemedView } from '@/components/themed-view';
 import axios from 'axios';
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, StyleSheet, TextInput } from 'react-native';
+import { Stack } from 'expo-router';
+import { ActivityIndicator, Alert, Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
 
 // 백엔드 서버 주소 (login.tsx와 동일하게 설정)
 // 환경 변수로 관리하는 것을 권장합니다. (예: process.env.EXPO_PUBLIC_API_URL)
@@ -46,6 +47,8 @@ export default function SignupScreen() {
   };
 
   return (
+    <>
+    <Stack.Screen options={{ headerShown: false }} />
     <ThemedView style={styles.container}>
       <ThemedText type="title" style={styles.title2}>캐롯</ThemedText>
       <ThemedText type="title" style={styles.title}>가입하기</ThemedText>
@@ -69,12 +72,16 @@ export default function SignupScreen() {
       <Pressable style={({ pressed }) => [styles.signupButton, pressed && styles.signupButtonPressed]} onPress={handleSignup} disabled={isLoading}>
         {isLoading ? <ActivityIndicator color="#fff" /> : <ThemedText style={styles.signupButtonText}>회원가입</ThemedText>}
       </Pressable>
-      <Link href="/" asChild>
-        <Pressable style={styles.linkContainer}>
-          <ThemedText type="link">이미 계정이 있으신가요? 로그인</ThemedText>
-        </Pressable>
-      </Link>
+      <View style={styles.loginContainer}>
+        <Text style={styles.normalText}>이미 계정이 있으신가요? </Text>
+        <Link href="/login" asChild>
+          <Pressable>
+            <Text style={styles.loginText}>로그인</Text>
+          </Pressable>
+        </Link>
+      </View>
     </ThemedView>
+    </>
   );
 }
 
@@ -88,15 +95,16 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'left',
-    marginLeft: 30,
-    marginBottom: 60,
+    marginLeft: 35,
+    marginBottom: 70,
   },
   title2: {
     textAlign: 'left',
     color: '#FFB347',
-    marginLeft: 30,
+    marginLeft: 35,
   },
   input: {
+    width: 1415,
     height: 50,
     backgroundColor: '#D3D3D3',
     paddingHorizontal: 16,
@@ -104,14 +112,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#ddd',
+    marginLeft: 30,
   },
   signupButton: {
-  height: 50,
-  backgroundColor: '#FFE0A3', // 
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: 8,
-  marginTop: 100,
+    width: 1415,
+    height: 50,
+    backgroundColor: '#FFE0A3', // 
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+    marginTop: 100,
+    marginLeft: 30,
   },
   signupButtonPressed: {
     backgroundColor: '#D3D3D3', // 버튼 눌렀을 때 살짝 진한 오렌지
@@ -121,6 +132,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     textAlign: 'center',
+  },
+  loginContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 3,
+  },
+  normalText: {
+    color: '#000',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  loginText: {
+    color: '#FFB347',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   linkContainer: { marginTop: 16, alignItems: 'center' },
 });

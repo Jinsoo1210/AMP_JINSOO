@@ -3,7 +3,8 @@ import { ThemedView } from '@/components/themed-view';
 import axios from 'axios';
 import { Link, router } from 'expo-router';
 import { useEffect, useState } from 'react'; 
-import { tokenStorage } from '../storage';
+import { tokenStorage } from './storage';
+import { Stack } from 'expo-router';
 import { ActivityIndicator, Alert, Platform, Pressable, StyleSheet, TextInput } from 'react-native';
 
 // 백엔드 서버 주소 (실행 환경에 맞게 수정)
@@ -16,6 +17,8 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // ✅ 현재 시간 실시간 업데이트
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -104,14 +107,13 @@ export default function LoginScreen() {
   };
 
   return (
+    <>
+    <Stack.Screen options={{ headerShown: false }} />
     <ThemedView style={styles.container}>
       <ThemedText style={styles.slogan}>
-         당신만의 스마트 비서 투두리스트
+         계정
       </ThemedText>
-      <ThemedText style={styles.slogan2}>
-         캐롯
-      </ThemedText>
-      {/* <TextInput
+      <TextInput
         style={styles.input}
         placeholder="이메일"
         value={email}
@@ -127,31 +129,24 @@ export default function LoginScreen() {
         onChangeText={setPassword}
         secureTextEntry
         placeholderTextColor="#888"
-      /> */}
+      />
       {/* <Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]} onPress={handleLogin} disabled={isLoading}>
         {isLoading ? <ActivityIndicator color="#fff" /> : <ThemedText style={styles.buttonText}>로그인</ThemedText>}
       </Pressable> */}
       <Pressable
         style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
-        onPress={() => router.push('/login')}
+        // ✅ 임시로 API 대신 바로 /home으로 이동
+        onPress={() => router.replace('/home')}
         disabled={isLoading}
       >
         {isLoading ? (
-          <ActivityIndicator color="#fff" />
+            <ActivityIndicator color="#fff" />
         ) : (
-          <ThemedText style={styles.buttonText}>로그인</ThemedText>
+            <ThemedText style={styles.buttonText}>로그인</ThemedText>
         )}
       </Pressable>
-      <Pressable
-        style={({ pressed }) => [
-        styles.signupButton,
-        pressed && styles.signupButtonPressed
-      ]}
-      onPress={() => router.push('/signup')} // 회원가입 화면으로 이동
->
-  <ThemedText style={styles.signupButtonText}>회원가입</ThemedText>
-</Pressable>
     </ThemedView>
+    </>
   );
 }
 
@@ -165,40 +160,13 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   slogan: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 36,
+    fontWeight: 'bold',
     color: '#3A3A3A',
-    textAlign: 'center',  // 화면 가운데 정렬
-    marginBottom: 12,        // 로그인 박스 위에 여유 공간
-  },
-  slogan2: {
-    fontSize: 40,
-    fontWeight: '700',
-    color: '#FFB347',
-    textAlign: 'center',  // 화면 가운데 정렬
-    marginBottom: 100,        // 로그인 박스 위에 여유 공간
-  },
-  time: {
-    textAlign: 'center',
-    fontSize: 120, // 커다란 시계
-    fontWeight: '700',
-    color: '#222222',
-    marginBottom: 50,
-
-    textShadowColor: '#D3D3D3',    // 그림자(테두리) 색상
-    textShadowOffset: { width: 9, height: 6 }, // 그림자 위치
-    textShadowRadius: 2, 
-  },
-  date: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: '500',
-    color: '#222222',
-    marginBottom: 50,
-
-    textShadowColor: '#D3D3D3',    // 그림자(테두리) 색상
-    textShadowOffset: { width: 3, height: 2 }, // 그림자 위치
-    textShadowRadius: 2, 
+    textAlign: 'left',    // 왼쪽 정렬 ✅
+    alignSelf: 'flex-start',
+    marginBottom: 120,        // 로그인 박스 위에 여유 공간
+    marginLeft: 50,        
   },
   input: {
     width: 1400,
@@ -217,7 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
-    marginTop: 30,
+    marginTop: 100,
   },
   buttonPressed: {
     backgroundColor: '#D3D3D3',
@@ -226,24 +194,6 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  signupButton: {
-    width: 1400,
-    height: 50,
-    backgroundColor: '#FFE0A3', // 
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
-    marginTop: 8,
-  },
-  signupButtonPressed: {
-    backgroundColor: '#D3D3D3', // 버튼 눌렀을 때 살짝 진한 오렌지
-  },
-  signupButtonText: {
-    color: '#000',
-    fontSize: 16,
-    fontWeight: '700',
-    textAlign: 'center',
   },
   linkContainer: {
       marginTop: 16,
