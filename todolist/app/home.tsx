@@ -402,6 +402,14 @@ function CategoryContent() {
 // -------------------- InformationContent --------------------
 function InformationContent() {
   const navigation = useNavigation<any>();
+
+  const handleLogout = () => {
+    // 로그아웃 로직 작성 (예: 토큰 삭제, 로그인 화면 이동 등)
+    console.log('로그아웃 클릭됨');
+    // 예: 로그인 화면으로 이동
+    router.replace('/'); 
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
       <View style={styles.container}>
@@ -438,6 +446,21 @@ function InformationContent() {
             <Text style={styles.infoBox}>홍길동</Text>
           </View>
         </View>
+
+        <View style={{ paddingHorizontal: 16, marginTop: 30 }}>
+          <Pressable
+            onPress={handleLogout}
+            style={{
+              backgroundColor: '#ff4d4f',
+              paddingVertical: 14,
+              borderRadius: 10,
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>로그아웃</Text>
+          </Pressable>
+        </View>
+
       </View>
     </SafeAreaView>
   );
@@ -462,12 +485,6 @@ function CustomDrawerContent(props: any) {
       <View style={{ height: 1, backgroundColor: '#ccc', marginVertical: 8 }} />
 
       <DrawerItem label="계정 정보" onPress={() => props.navigation.navigate('Info')} />
-      {/* <DrawerItem
-        label="계정 정보"
-        onPress={() => {
-          router.replace('/');
-        }}
-      /> */}
     </DrawerContentScrollView>
   );
 }

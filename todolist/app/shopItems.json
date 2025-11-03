@@ -1,0 +1,26 @@
+{
+  "모자": [
+    { "id": "h1", "name": "밀짚 모자", "price": 40, "emoji": "🎅" },
+    { "id": "h2", "name": "카우보이 모자", "price": 50, "emoji": "🧙" },
+    { "id": "h3", "name": "요리사 모자", "price": 50, "emoji": "🧑‍🍳" },
+    { "id": "h4", "name": "산타 모자", "price": 80, "emoji": "👑" },
+    { "id": "h5", "name": "생일 모자", "price": 80, "emoji": "🧢" },
+    { "id": "h6", "name": "왕관", "price": 100, "emoji": "🎓" }
+  ],
+  "장신구": [
+    { "id": "a1", "name": "하트 장식", "price": 30, "emoji": "😎" },
+    { "id": "a2", "name": "나비 넥타이", "price": 40, "emoji": "💎" },
+    { "id": "a3", "name": "넥타이", "price": 50, "emoji": "🤵" },
+    { "id": "a4", "name": "도트리본", "price": 60, "emoji": "😎" },
+    { "id": "a5", "name": "목도리", "price": 80, "emoji": "💎" },
+    { "id": "a6", "name": "리본", "price": 90, "emoji": "🤵" }
+  ],
+  "배경": [
+    { "id": "b1", "name": "튤립 배경", "price": 80, "emoji": "🏙️" },
+    { "id": "b2", "name": "선인장 배경", "price": 80, "emoji": "🏖️" },
+    { "id": "b3", "name": "눈사람 배경", "price": 90, "emoji": "⛰️" },
+    { "id": "b4", "name": "생일 배경", "price": 100, "emoji": "🏙️" },
+    { "id": "b5", "name": "케이크 배경", "price": 120, "emoji": "🏖️" },
+    { "id": "b6", "name": "계단 배경", "price": 130, "emoji": "⛰️" }
+  ]
+}

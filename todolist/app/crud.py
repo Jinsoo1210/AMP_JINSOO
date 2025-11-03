@@ -21,6 +21,7 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
 # 사용자 ID로 Todo 목록 조회 함수
 def get_todos(db: Session, user_id: int, skip: int = 0, limit: int = 100):
     return db.query(models.Todo).filter(models.Todo.owner_id == user_id).offset(skip).limit(limit).all()
+
 # 사용자 ID로 Todo 생성 함수
 def create_user_todo(db: Session, todo: schemas.TodoCreate, user_id: int):
     db_todo = models.Todo(**todo.dict(), owner_id=user_id)
@@ -28,9 +29,11 @@ def create_user_todo(db: Session, todo: schemas.TodoCreate, user_id: int):
     db.commit()
     db.refresh(db_todo)
     return db_todo
+
 # ID로 단일 할일 항목 조회 함수
 def get_todo(db: Session, todo_id: int):
     return db.query(models.Todo).filter(models.Todo.id == todo_id).first()
+
 # ID로 할일 항목 업데이트 함수
 def update_todo(db: Session, todo_id: int, todo: schemas.TodoUpdate):
     db_todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
@@ -41,10 +44,13 @@ def update_todo(db: Session, todo_id: int, todo: schemas.TodoUpdate):
         db.commit()
         db.refresh(db_todo)
     return db_todo
+
 # ID로 할일 항목 삭제 함수
 def delete_todo(db: Session, todo_id: int):
     db_todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
     if db_todo:
         db.delete(db_todo)
         db.commit()
+    # 삭제 후에는 객체가 세션에서 만료되므로, 삭제 성공 여부를 boolean 등으로 반환하거나
+    # 삭제된 객체 정보를 담은 dict를 반환할 수 있습니다. 여기서는 삭제된 객체를 반환합니다.
     return db_todo

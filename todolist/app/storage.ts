@@ -1,5 +1,5 @@
-import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
 /**
  * 크로스 플랫폼(cross-platform)을 지원하는 스토리지 유틸리티입니다.

@@ -1,10 +1,12 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable } from 'react-native';
+import { ThemedText } from '@/components/themed-text';
 export const unstable_settings = {
   // Set the initial route to the login screen.
   initialRouteName: '(tabs)',
@@ -22,8 +24,6 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="signup" options={{ headerShown: false }} />
-        <Stack.Screen name="home" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} /> {/* 모달은 일반적으로 헤더에 뒤로 가기 버튼을 표시하지 않습니다. */}
       </Stack>
       <StatusBar style="auto" />
